@@ -13,6 +13,9 @@ do
     echo "${VAR} -> ${VAR_NAME%_COMMAND}=${EVALUATED_VALUE}"
   fi
 done
+
+KAFKA_BROKER_ID=`hostname | cut -d"-" -f2`
+
 # Check mandatory parameters
 if [ -z "$KAFKA_BROKER_ID" ]; then
   echo "\$KAFKA_BROKER_ID not set"
@@ -58,5 +61,7 @@ done
 # Logging config
 sed -i "s/^kafka\.logs\.dir=.*$/kafka\.logs\.dir=\/var\/log\/kafka/" /opt/kafka/config/log4j.properties
 export LOG_DIR=/var/log/kafka
+
+sed -i "s/^broker.id=.*$/broker.id=${KAFKA_BROKER_ID}/g" /opt/kafka/config/server.properties
 
 su root -s /bin/bash -c "cd /opt/kafka && bin/kafka-server-start.sh config/server.properties"
