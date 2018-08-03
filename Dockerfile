@@ -1,5 +1,7 @@
 FROM openjdk:8-jre-alpine
 
+MAINTAINER sohu234
+
 ARG KAFKA_VERSION=0.10.2.1
 ARG KAFKA_MIRROR=http://www-eu.apache.org
 ARG KAFKA_SCALA_VERSION=2.12
@@ -19,9 +21,7 @@ RUN mkdir /opt \
   && mv /opt/kafka_* $KAFKA_HOME \
   && chown -R root:root $KAFKA_HOME
 
-RUN addgroup -S kafka \
-  && adduser -h /var/lib/kafka -G kafka -S -H -s /sbin/nologin kafka \
-  && mkdir /var/lib/kafka \
+RUN mkdir /var/lib/kafka \
   && mkdir /var/log/kafka
 
 EXPOSE 9092
